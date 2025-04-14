@@ -133,13 +133,18 @@ export default function Dashboard() {
               </ResponsiveContainer>
               <table className="w-full text-left border">
                 <thead>
-                  <tr>
-                    {reportData[0].map((_, index) => (
-                      <th key={index} className="border px-2 py-1 text-sm">
-                        Колонка {index + 1}
-                      </th>
-                    ))}
-                  </tr>
+         <thead>
+  <tr>
+    {Array.isArray(reportData[0])
+      ? reportData[0].map((_, index) => (
+          <th key={index} className="border px-2 py-1 text-sm">
+            Колонка {index + 1}
+          </th>
+        ))
+      : null}
+  </tr>
+</thead>
+
                 </thead>
                 <tbody>
                   {reportData.map((row, i) => (
