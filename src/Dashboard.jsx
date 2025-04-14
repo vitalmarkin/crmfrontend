@@ -122,15 +122,23 @@ export default function Dashboard() {
             <p className="text-gray-500">Нет данных для отображения</p>
           ) : (
             <div className="space-y-4">
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={reportData.map((r, i) => ({ name: r[0] || `Запись ${i+1}`, value: r[4] }))}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" hide={false} />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="value" stroke="#3b82f6" />
-                </LineChart>
-              </ResponsiveContainer>
+    {Array.isArray(reportData) && reportData.length > 0 && (
+  <ResponsiveContainer width="100%" height={300}>
+    <LineChart
+      data={reportData.map((r, i) => ({
+        name: r[0] || `Кампания ${i + 1}`,
+        value: Number(r[4]) || 0,
+      }))}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="value" stroke="#3b82f6" />
+    </LineChart>
+  </ResponsiveContainer>
+)}
+
               <table className="w-full text-left border">
                 <thead>
          <thead>
