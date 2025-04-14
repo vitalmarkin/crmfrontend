@@ -31,6 +31,17 @@ export default function Dashboard() {
   };
 
   const fetchReport = async () => {
+    console.log("fetchReport вызывается с:", {
+      selectedCampaign,
+      dateFrom,
+      dateTo,
+    });
+
+    if (!selectedCampaign) {
+      alert("Пожалуйста, выбери кампанию");
+      return;
+    }
+
     try {
       const res = await axios.get(
         `https://crm-backend-xl69.onrender.com/api/keitaro/traffic?campaign_id=${selectedCampaign}&from=${dateFrom}&to=${dateTo}`
