@@ -35,6 +35,7 @@ export default function Dashboard() {
       const res = await axios.get(
         `https://crm-backend-xl69.onrender.com/api/keitaro/traffic?campaign_id=${selectedCampaign}&from=${dateFrom}&to=${dateTo}`
       );
+      console.log("Данные отчета:", res.data);
       setReportData(res.data.rows || []);
     } catch (err) {
       console.error("Ошибка при загрузке отчета:", err);
@@ -118,55 +119,49 @@ export default function Dashboard() {
 
         <div className="bg-white p-4 rounded-xl shadow-md">
           <h2 className="text-lg font-semibold mb-4">Топ кампаний по доходу</h2>
-          {reportData.length === 0 ? (
-            <p className="text-gray-500">Нет данных для отображения</p>
-          ) : (
+          {Array.isArray(reportData) && reportData.length > 0 ? (
             <div className="space-y-4">
-    {Array.isArray(reportData) && reportData.length > 0 && (
-  <ResponsiveContainer width="100%" height={300}>
-    <LineChart
-      data={reportData.map((r, i) => ({
-        name: r[0] || `Кампания ${i + 1}`,
-        value: Number(r[4]) || 0,
-      }))}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Line type="monotone" dataKey="value" stroke="#3b82f6" />
-    </LineChart>
-  </ResponsiveContainer>
-)}
-
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart
+                  data={reportData.map((r, i) => ({
+                    name: r[0] || `Кампания ${i + 1}`,
+                    value: Number(r[4]) || 0,
+                  }))}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="value" stroke="#3b82f6" />
+                </LineChart>
+              </ResponsiveContainer>
               <table className="w-full text-left border">
                 <thead>
-         <thead>
-  <tr>
-    {Array.isArray(reportData[0])
-      ? reportData[0].map((_, index) => (
-          <th key={index} className="border px-2 py-1 text-sm">
-            Колонка {index + 1}
-          </th>
-        ))
-      : null}
-  </tr>
-</thead>
-
+                  <tr>
+                    {Array.isArray(reportData[0]) &&
+                      reportData[0].map((_, index) => (
+                        <th key={index} className="border px-2 py-1 text-sm">
+                          Колонка {index + 1}
+                        </th>
+                      ))}
+                  </tr>
                 </thead>
                 <tbody>
                   {reportData.map((row, i) => (
                     <tr key={i}>
-                      {row.map((cell, j) => (
-                        <td key={j} className="border px-2 py-1 text-sm">
-                          {cell}
-                        </td>
-                      ))}
+                      {Array.isArray(row) &&
+                        row.map((cell, j) => (
+                          <td key={j} className="border px-2 py-1 text-sm">
+                            {cell}
+                          </td>
+                        ))}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+          ) : (
+            <p className="text-gray-500">Нет данных для отображения</p>
           )}
         </div>
       </div>
